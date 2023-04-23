@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/19 11:52:07 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/04/23 15:35:04 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/04/23 17:03:14 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	*print_time(void *arg)
 	i++;
 	pthread_mutex_unlock(&philos->lock);
 	time = 0;
-	while (true)
+	while (time < philos->time_to_die)
 	{
 		time2 = (get_time() - philos->start_time);
 		if (philos->thinker[id]->life == false)
