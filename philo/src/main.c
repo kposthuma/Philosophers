@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/20 17:40:29 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/04/23 11:52:23 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/04/23 15:38:16 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,9 @@ t_thinker	**make_philos(size_t num)
 		if (!thinker[i])
 			return (NULL); //free everything
 		thinker[i]->philo_id = i + 1;
-		thinker[i]->fork = 0;
+		thinker[i]->fork = false;
+		thinker[i]->life = true;
+		thinker[i]->last_supper = get_time();
 		i++;
 	}
 	return (thinker);
@@ -73,15 +75,23 @@ int	main(int argc, char **argv)
 	if (check_input(argc, argv) != 0)
 		return (1);
 	philos = init_philos(argv);
-	thread = malloc(philos->number_of_philos * sizeof(pthread_t));
+	thread = malloc(philos->number_of_philos + 1 * sizeof(pthread_t));
 	if (!thread || !philos)
 		return (philo_error("Memory allocation error\n"), 1);
 	pthread_mutex_init(&philos->lock, NULL);
 	x = 0;
-	while (x++ < philos->number_of_philos)
+	while (x < philos->number_of_philos)
+	{
 		pthread_create(&thread[x], NULL, &print_time, (void *)philos);
-	while (x--)
+		x++;
+	}
+	pthread_create(&thread[x], NULL, &is_dead, (void *)philos);
+	x++;
+	while (x > 0)
+	{
 		pthread_join(thread[x], NULL);
+		x--;
+	}
 	pthread_mutex_destroy(&philos->lock);
 	return (0);
 }

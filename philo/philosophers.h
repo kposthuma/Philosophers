@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/19 12:55:25 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/04/20 17:47:04 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/04/23 15:30:02 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,14 @@
 # include<string.h>
 # include<sys/time.h>
 # include<pthread.h>
+# include<stdbool.h>
 
 typedef struct s_thinker
 {
-	size_t	philo_id;
-	int		fork;
+	size_t				philo_id;
+	bool				fork;
+	unsigned long long	last_supper;
+	bool				life;
 }	t_thinker;
 
 typedef struct s_philos
@@ -48,5 +51,6 @@ void				philo_error(char *message);
 int					arg_to_int(char *arg);
 unsigned long long	get_time(void);
 void				*print_time(void *arg);
-
+void				death(t_philos *philos);
+void				*is_dead(void *arg);
 #endif

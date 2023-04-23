@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/19 11:52:07 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/04/23 11:57:15 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/04/23 15:35:04 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,16 +54,68 @@ unsigned long long	get_time(void)
 
 void	*print_time(void *arg)
 {
-	t_philos		*philos;
-	static size_t	i;
-	int				x;
+	t_philos			*philos;
+	static size_t		i;
+	size_t				id;
+	unsigned long long	time;
+	unsigned long long	time2;
 
 	philos = (t_philos *)arg;
 	pthread_mutex_lock(&philos->lock);
-	x = i;
+	id = i;
 	printf("runtime: %llums in thread %lu\n",
-		(get_time() - philos->start_time), philos->thinker[x]->philo_id);
+		(get_time() - philos->start_time), philos->thinker[id]->philo_id);
 	i++;
 	pthread_mutex_unlock(&philos->lock);
+	time = 0;
+	while (true)
+	{
+		time2 = (get_time() - philos->start_time);
+		if (philos->thinker[id]->life == false)
+			return (NULL);
+		if (time2 >= (time + 10))
+		{
+			printf("runtime: %llums in thread %lu\n", time2,
+				philos->thinker[id]->philo_id);
+			time = time2;
+		}
+		usleep(4000);
+	}
+	return (NULL);
+}
+
+void	death(t_philos *philos)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < philos->number_of_philos)
+	{
+		philos->thinker[i]->life = false;
+		i++;
+	}
+}
+
+void	*is_dead(void *arg)
+{
+	t_philos	*philos;
+	size_t		i;
+
+	i = 0;
+	philos = (t_philos *)arg;
+	while (i < philos->number_of_philos)
+	{
+		if (get_time() - philos->thinker[i]->last_supper > philos->time_to_die)
+		{
+			pthread_mutex_lock(&philos->lock);
+			printf("%llu %lu %s", get_time() - philos->start_time,
+				philos->thinker[i]->philo_id, "died\n");
+			death(philos);
+			pthread_mutex_unlock(&philos->lock);
+			return (NULL);
+		}
+		i++;
+	}
+	is_dead((void *)philos);
 	return (NULL);
 }
