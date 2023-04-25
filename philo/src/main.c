@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/20 17:40:29 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/04/25 13:41:02 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/04/25 18:17:34 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,3 +99,7 @@ int	main(int argc, char **argv)
 	pthread_mutex_destroy(&philos->lock);
 	return (0);
 }
+
+//TODO fix max mealtimes
+//TODO fix 1 philo
+//TODO free everything 

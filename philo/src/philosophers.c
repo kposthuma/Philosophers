@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/19 11:52:07 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/04/25 16:27:13 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/04/25 18:04:06 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ void	*philo_sleep(t_philos *philos, size_t id)
 		pthread_mutex_lock(&philos->lock);
 		if (philos->thinker[id]->life == false)
 			return (pthread_mutex_unlock(&philos->lock), NULL);
-		usleep(1000);
 		philo_sleep = finished_action(start_time, philos->time_to_sleep);
 		pthread_mutex_unlock(&philos->lock);
+		usleep(1000);
 	}
 	pthread_mutex_lock(&philos->lock);
 	if (philos->thinker[id]->life == false)
@@ -61,12 +61,12 @@ void	*philo_eat(t_philos *philos, size_t id, size_t id2)
 		pthread_mutex_lock(&philos->lock);
 		if (philos->thinker[id]->life == false)
 			return (pthread_mutex_unlock(&philos->lock), NULL);
-		usleep(1000);
 		philo_meal = finished_action(start_time, philos->time_to_eat);
 		pthread_mutex_unlock(&philos->lock);
+		usleep(1000);
 	}
 	pthread_mutex_lock(&philos->lock);
-	philos->thinker[id]->last_supper = get_time() - philos->start_time;
+	philos->thinker[id]->last_supper = get_time();
 	philos->thinker[id]->fork = 0;
 	philos->thinker[id2]->fork = 0;
 	philos->thinker[id]->meals_eaten++;

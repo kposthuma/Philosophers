@@ -6,11 +6,11 @@
 #    By: kposthum <kposthum@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/10/06 16:04:34 by kposthum      #+#    #+#                  #
-#    Updated: 2023/04/25 15:48:24 by kposthum      ########   odam.nl          #
+#    Updated: 2023/04/25 17:49:46 by kposthum      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
-CC := gcc -Wall -Werror -Wextra #-g -fsanitize=address#
+CC := gcc -Wall -Werror -Wextra -g -fsanitize=address
 NAME := philo
 SRCS := main.c	philosophers.c	philo_death.c	philo_utils.c
 
