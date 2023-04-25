@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/19 12:55:25 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/04/25 15:38:00 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/04/25 15:46:56 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ typedef struct s_thinker
 typedef struct s_philos
 {
 	size_t			number_of_philos;
-	size_t			time_to_die;
-	size_t			time_to_eat;
-	size_t			time_to_sleep;
+	t_time			time_to_die;
+	t_time			time_to_eat;
+	t_time			time_to_sleep;
 	size_t			number_of_meals;
 	t_time			start_time;
 	pthread_mutex_t	lock;
@@ -54,7 +54,7 @@ t_philos	*init_philos(char **argv);
 int			check_input(int argc, char **argv);
 
 // philo_utils.c
-bool		finished_action(t_time start_time, size_t duration);
+bool		finished_action(t_time start_time, t_time duration);
 void		philo_error(char *message);
 int			arg_to_int(char *arg);
 t_time		get_time(void);

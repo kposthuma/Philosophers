@@ -6,13 +6,13 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/25 12:30:35 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/04/25 15:37:17 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/04/25 15:47:03 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include<philosophers.h>
 
-bool	finished_action(t_time start_time, size_t duration)
+bool	finished_action(t_time start_time, t_time duration)
 {	
 	t_time	curr_time;
 

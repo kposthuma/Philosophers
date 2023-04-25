@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/19 11:52:07 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/04/25 15:42:31 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/04/25 15:48:08 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	*philo_sleep(t_philos *philos, size_t id)
 		if (philos->thinker[id]->life == false)
 			return (pthread_mutex_unlock(&philos->lock), NULL);
 		usleep(1000);
-		philo_sleep = finished_sleeping(philos, start_time);
+		philo_sleep = finished_action(start_time, philos->time_to_sleep);
 		pthread_mutex_unlock(&philos->lock);
 	}
 	pthread_mutex_lock(&philos->lock);
