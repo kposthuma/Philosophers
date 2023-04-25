@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/25 12:32:58 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/04/25 12:33:08 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/04/25 12:51:37 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	*is_dead(void *arg)
 	while (i < philos->number_of_philos)
 	{
 		now = get_time() - philos->thinker[i]->last_supper;
-		if (now > philos->time_to_die)
+		if (now >= philos->time_to_die)
 		{
 			printf("%llu %lu %s", get_time() - philos->start_time,
 				philos->thinker[i]->philo_id, "died\n");

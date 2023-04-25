@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/20 17:40:29 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/04/25 12:33:57 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/04/25 12:59:05 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_thinker	**make_philos(size_t num)
 		if (!thinker[i])
 			return (NULL); //free everything
 		thinker[i]->philo_id = i + 1;
-		thinker[i]->fork = false;
+		thinker[i]->fork = 0;
 		thinker[i]->life = true;
 		thinker[i]->last_supper = get_time();
 		i++;
