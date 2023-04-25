@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/25 12:32:58 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/04/25 12:51:37 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/04/25 15:33:46 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ void	death(t_philos *philos)
 
 void	*is_dead(void *arg)
 {
-	t_philos			*philos;
-	size_t				i;
-	unsigned long long	now;
+	t_philos	*philos;
+	size_t		i;
+	t_time		now;
 
 	i = 0;
 	philos = (t_philos *)arg;
@@ -48,5 +48,29 @@ void	*is_dead(void *arg)
 	pthread_mutex_unlock(&philos->lock);
 	usleep(1000);
 	is_dead((void *)philos);
+	return (NULL);
+}
+
+void	*has_eaten(void *arg)
+{
+	t_philos	*philos;
+	size_t		i;
+	size_t		end;
+
+	i = 0;
+	end = 0;
+	philos = (t_philos *)arg;
+	pthread_mutex_lock(&philos->lock);
+	while (i < philos->number_of_philos)
+	{
+		if (philos->thinker[i]->meals_eaten == philos->number_of_meals)
+			end++;
+		i++;
+	}
+	if (end == philos->number_of_philos)
+		return (death(philos), NULL);
+	pthread_mutex_unlock(&philos->lock);
+	usleep(100);
+	has_eaten((void *)philos);
 	return (NULL);
 }

@@ -6,21 +6,31 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/25 12:30:35 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/04/25 12:31:41 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/04/25 15:37:17 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include<philosophers.h>
+
+bool	finished_action(t_time start_time, size_t duration)
+{	
+	t_time	curr_time;
+
+	curr_time = get_time();
+	if (curr_time - start_time <= duration)
+		return (false);
+	return (true);
+}
 
 void	philo_error(char *message)
 {
 	printf("%s", message);
 }
 
-unsigned long long	get_time(void)
+t_time	get_time(void)
 {
-	unsigned long long		time;
-	struct timeval			curr;
+	t_time			time;
+	struct timeval	curr;
 
 	gettimeofday(&curr, NULL);
 	return (time = (curr.tv_sec * 1000 + curr.tv_usec / 1000));
