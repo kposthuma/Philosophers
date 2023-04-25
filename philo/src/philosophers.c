@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/19 11:52:07 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/04/25 15:48:08 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/04/25 16:27:13 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void	*philo_sleep(t_philos *philos, size_t id)
 
 	pthread_mutex_lock(&philos->lock);
 	start_time = get_time();
+	if (philos->thinker[id]->life == false)
+		return (pthread_mutex_unlock(&philos->lock), NULL);
 	printf("%llu %lu %s", get_time() - philos->start_time,
 		philos->thinker[id]->philo_id, "is sleeping\n");
 	philo_sleep = finished_action(start_time, philos->time_to_sleep);
@@ -33,6 +35,8 @@ void	*philo_sleep(t_philos *philos, size_t id)
 		pthread_mutex_unlock(&philos->lock);
 	}
 	pthread_mutex_lock(&philos->lock);
+	if (philos->thinker[id]->life == false)
+		return (pthread_mutex_unlock(&philos->lock), NULL);
 	printf("%llu %lu %s", get_time() - philos->start_time,
 		philos->thinker[id]->philo_id, "is thinking\n");
 	pthread_mutex_unlock(&philos->lock);
@@ -46,6 +50,8 @@ void	*philo_eat(t_philos *philos, size_t id, size_t id2)
 
 	pthread_mutex_lock(&philos->lock);
 	start_time = get_time();
+	if (philos->thinker[id]->life == false)
+		return (pthread_mutex_unlock(&philos->lock), NULL);
 	printf("%llu %lu %s", get_time() - philos->start_time,
 		philos->thinker[id]->philo_id, "is eating\n");
 	philo_meal = finished_action(start_time, philos->time_to_eat);
@@ -71,12 +77,16 @@ void	*philo_eat(t_philos *philos, size_t id, size_t id2)
 bool	take_forks(t_philos *philos, size_t id, size_t id2)
 {
 	pthread_mutex_lock(&philos->lock);
+	if (philos->thinker[id]->life == false)
+		return (pthread_mutex_unlock(&philos->lock), NULL);
 	if (philos->thinker[id]->fork == 0)
 	{
 		printf("%llu %lu %s", get_time() - philos->start_time,
 			philos->thinker[id]->philo_id, "has taken a fork\n");
 		philos->thinker[id]->fork = 1;
 	}
+	if (philos->thinker[id]->life == false)
+		return (pthread_mutex_unlock(&philos->lock), NULL);
 	if (philos->thinker[id2]->fork == 0)
 	{
 		printf("%llu %lu %s", get_time() - philos->start_time,
@@ -104,10 +114,16 @@ void	*philo_thread(void *arg)
 	else
 		id2 = id - 1;
 	i++;
+	printf("%llu %lu %s", get_time() - philos->start_time,
+		philos->thinker[id]->philo_id, "is thinking\n");
 	pthread_mutex_unlock(&philos->lock);
 	while (true)
 	{
+		if (philos->thinker[id]->life == false)
+			return (NULL);
 		has_forks = take_forks(philos, id, id2);
+		if (philos->thinker[id]->life == false)
+			return (NULL);
 		if (has_forks == true)
 			philo_eat(philos, id, id2);
 	}
