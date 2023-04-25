@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/19 12:55:25 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/04/23 15:30:02 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/04/25 12:36:14 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,15 @@ t_thinker			**make_philos(size_t num);
 t_philos			*init_philos(char **argv);
 int					check_input(int argc, char **argv);
 
-// philosophers.c
+// philo_utils.c
 void				philo_error(char *message);
 int					arg_to_int(char *arg);
 unsigned long long	get_time(void);
-void				*print_time(void *arg);
+
+// philosophers.c
+void				*philo_thread(void *arg);
+
+// philo_death.c
 void				death(t_philos *philos);
 void				*is_dead(void *arg);
 #endif

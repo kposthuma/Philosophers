@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/20 17:40:29 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/04/23 17:06:15 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/04/25 12:33:57 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,11 @@ Please input only posisitve integers.\n"), 1);
 	return (0);
 }
 
+// void	f(void)
+// {
+// 	system("leaks philo");
+// }
+
 int	main(int argc, char **argv)
 {
 	t_philos	*philos;
@@ -80,14 +85,13 @@ int	main(int argc, char **argv)
 		return (philo_error("Memory allocation error\n"), 1);
 	pthread_mutex_init(&philos->lock, NULL);
 	x = 0;
-	while (x++ < philos->number_of_philos)
-		pthread_create(&thread[x], NULL, &print_time, (void *)philos);
+	while (x < philos->number_of_philos)
+		pthread_create(&thread[x++], NULL, &philo_thread, (void *)philos);
+	pthread_create(&thread[x], NULL, &is_dead, (void *)philos);
 	x = 0;
-	while (x++ < philos->number_of_philos)
-		pthread_join(thread[x], NULL);
-	pthread_create(&thread[philos->number_of_philos], NULL, &is_dead,
-		(void *)philos);
-	pthread_join(thread[philos->number_of_philos], NULL);
+	while (x < philos->number_of_philos)
+		pthread_join(thread[x++], NULL);
+	pthread_join(thread[x], NULL);
 	pthread_mutex_destroy(&philos->lock);
 	return (0);
 }
