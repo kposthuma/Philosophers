@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/19 11:52:07 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/02 15:08:46 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/02 15:46:25 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,8 @@ void	*philo_thread(void *arg)
 	printf("%llu %lu %s", get_time() - philos->start_time,
 		philos->thinker[id]->philo_id, "is thinking\n");
 	pthread_mutex_unlock(&philos->lock);
+	if (id % 2 == 1)
+		usleep(10000);
 	while (true)
 	{
 		if (philos->thinker[id]->life == false)

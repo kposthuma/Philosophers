@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/20 17:40:29 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/02 15:12:38 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/02 15:43:28 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,4 @@ int	main(int argc, char **argv)
 	return (0);
 }
 
-//TODO fix max mealtimes
-//TODO fix 1 philo
 //TODO free everything 
