@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/20 17:40:29 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/04/25 18:17:34 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/02 15:12:38 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ t_thinker	**make_philos(size_t num)
 		thinker[i]->life = true;
 		thinker[i]->last_supper = get_time();
 		thinker[i]->meals_eaten = 0;
+		thinker[i]->finished = false;
 		i++;
 	}
 	return (thinker);
@@ -96,7 +97,13 @@ int	main(int argc, char **argv)
 	while (x < philos->number_of_philos)
 		pthread_join(thread[x++], NULL);
 	pthread_join(thread[x], NULL);
+	if (philos->number_of_meals != 0)
+		pthread_join(thread2, NULL);
 	pthread_mutex_destroy(&philos->lock);
+	// while (x)
+	// 	pthread_detach(thread[x--]);
+	// if (philos->number_of_meals != 0)
+	// 	pthread_detach(thread2);
 	return (0);
 }
 

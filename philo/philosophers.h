@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/19 12:55:25 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/04/25 15:46:56 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/02 13:21:53 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef struct s_thinker
 	t_time	last_supper;
 	bool	life;
 	size_t	meals_eaten;
+	bool	finished;
 }	t_thinker;
 
 typedef struct s_philos
