@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/19 11:52:07 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/02 17:03:24 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/02 18:25:07 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,21 @@
 
 bool	take_forks(t_philos *philos, size_t id, size_t id2)
 {
-	t_time	now;
-
 	pthread_mutex_lock(&philos->lock);
 	if (philos->thinker[id]->life == false)
 		return (pthread_mutex_unlock(&philos->lock), NULL);
 	if (philos->thinker[id]->fork == 0)
 	{
-		now = get_time() - philos->start_time;
-		printf("%llu %lu %s", now, philos->thinker[id]->philo_id,
-			"has taken a fork\n");
+		printf("%llu %lu %s", get_time() - philos->start_time,
+			philos->thinker[id]->philo_id, "has taken a fork\n");
 		philos->thinker[id]->fork = 1;
 	}
 	if (philos->thinker[id]->life == false)
 		return (pthread_mutex_unlock(&philos->lock), NULL);
 	if (philos->thinker[id2]->fork == 0)
 	{
-		now = get_time() - philos->start_time;
-		printf("%llu %lu %s", now, philos->thinker[id]->philo_id,
-			"has taken a fork\n");
+		printf("%llu %lu %s", get_time() - philos->start_time,
+			philos->thinker[id]->philo_id, "has taken a fork\n");
 		philos->thinker[id2]->fork = 2;
 	}
 	if (philos->thinker[id]->fork == 1 && philos->thinker[id2]->fork == 2)
@@ -40,17 +36,20 @@ bool	take_forks(t_philos *philos, size_t id, size_t id2)
 	return (pthread_mutex_unlock(&philos->lock), false);
 }
 
-bool	philo_loop(t_philos *philos, size_t id, size_t id2)
+void	philo_loop(t_philos *philos, size_t id, size_t id2)
 {
 	bool	has_forks;
 
-	if (philos->thinker[id]->life == false)
-		return (false);
-	has_forks = take_forks(philos, id, id2);
-	if (philos->thinker[id]->life == false || has_forks == false)
-		return (false);
-	philo_eat(philos, id, id2);
-	return (true);
+	while (true)
+	{
+		if (philos->thinker[id]->life == false)
+			break ;
+		has_forks = take_forks(philos, id, id2);
+		if (philos->thinker[id]->life == false)
+			break ;
+		if (has_forks == true)
+			philo_eat(philos, id, id2);
+	}
 }
 
 void	*philo_thread(void *arg)
@@ -73,10 +72,6 @@ void	*philo_thread(void *arg)
 	pthread_mutex_unlock(&philos->lock);
 	if (id % 2 == 1)
 		usleep(10000);
-	while (philo_loop(philos, id, id2))
-	{
-		if (philos->thinker[id]->life == false)
-			return (NULL);
-	}
+	philo_loop(philos, id, id2);
 	return (NULL);
 }

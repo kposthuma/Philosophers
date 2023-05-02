@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/19 12:55:25 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/02 17:04:26 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/02 18:43:15 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,14 +63,17 @@ t_time		get_time(void);
 
 // philosophers.c
 void		*philo_thread(void *arg);
+void		philo_loop(t_philos *philos, size_t id, size_t id2);
 bool		take_forks(t_philos *philos, size_t id, size_t id2);
 
+// philo_eat_sleep.c
 void		*philo_eat(t_philos *philos, size_t id, size_t id2);
-
 void		*philo_sleep(t_philos *philos, size_t id);
 
 // philo_death.c
 void		death(t_philos *philos);
+bool		death_loop(t_philos *philos);
 void		*is_dead(void *arg);
+bool		food_loop(t_philos *philos, size_t end);
 void		*has_eaten(void *arg);
 #endif

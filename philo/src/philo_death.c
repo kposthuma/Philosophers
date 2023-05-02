@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/25 12:32:58 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/02 17:22:50 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/02 19:35:21 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	*is_dead(void *arg)
 
 	philos = (t_philos *)arg;
 	while (death_loop(philos) == true)
-		usleep(100000);
+		usleep(10000);
 	return (NULL);
 }
 
@@ -65,7 +65,6 @@ void	*has_eaten(void *arg)
 	size_t		i;
 	size_t		end;
 
-	i = 0;
 	end = 0;
 	philos = (t_philos *)arg;
 	while (true)
@@ -80,19 +79,12 @@ void	*has_eaten(void *arg)
 				philos->thinker[i]->finished = true;
 				end++;
 				if (philos->thinker[i]->life == false)
-				{
-					pthread_mutex_unlock(&philos->lock);
-					return (NULL);
-				}
+					return (pthread_mutex_unlock(&philos->lock), NULL);
 			}
 			i++;
 		}
 		if (end == philos->number_of_philos)
-		{
-			death(philos);
-			pthread_mutex_unlock(&philos->lock);
-			return (NULL);
-		}
+			return (death(philos), pthread_mutex_unlock(&philos->lock), NULL);
 		pthread_mutex_unlock(&philos->lock);
 		usleep(100);
 	}

@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/25 12:30:35 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/02 17:06:36 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/02 18:34:51 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ bool	action_loop(t_philos *philos, size_t id, t_time duration)
 	t_time	start_time;
 
 	start_time = get_time();
-	finished = false;
+	finished = finished_action(start_time, duration);
 	while (finished != true)
 	{
 		pthread_mutex_lock(&philos->lock);
