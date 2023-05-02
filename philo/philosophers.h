@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/19 12:55:25 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/02 13:21:53 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/02 17:04:26 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int			check_input(int argc, char **argv);
 
 // philo_utils.c
 bool		finished_action(t_time start_time, t_time duration);
+bool		action_loop(t_philos *philos, size_t id, t_time duration);
 void		philo_error(char *message);
 int			arg_to_int(char *arg);
 t_time		get_time(void);
@@ -63,7 +64,9 @@ t_time		get_time(void);
 // philosophers.c
 void		*philo_thread(void *arg);
 bool		take_forks(t_philos *philos, size_t id, size_t id2);
+
 void		*philo_eat(t_philos *philos, size_t id, size_t id2);
+
 void		*philo_sleep(t_philos *philos, size_t id);
 
 // philo_death.c

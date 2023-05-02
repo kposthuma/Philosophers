@@ -6,14 +6,14 @@
 #    By: kposthum <kposthum@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/10/06 16:04:34 by kposthum      #+#    #+#                  #
-#    Updated: 2023/05/02 15:38:34 by kposthum      ########   odam.nl          #
+#    Updated: 2023/05/02 16:37:00 by kposthum      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 CC := gcc -Wall -Werror -Wextra -g #-fsanitize=address#
 NAME := philo
-SRCS := main.c	philosophers.c	philo_death.c	philo_utils.c
-
+SRCS := main.c	philosophers.c	philo_death.c	philo_utils.c\
+	philo_eat_sleep.c
 HEADERS	:= -I ./
 SRCDIR := ./src
 OBJDIR := ./obj

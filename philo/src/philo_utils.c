@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/25 12:30:35 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/04/25 15:47:03 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/02 17:06:36 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,25 @@ bool	finished_action(t_time start_time, t_time duration)
 	curr_time = get_time();
 	if (curr_time - start_time <= duration)
 		return (false);
+	return (true);
+}
+
+bool	action_loop(t_philos *philos, size_t id, t_time duration)
+{
+	bool	finished;
+	t_time	start_time;
+
+	start_time = get_time();
+	finished = false;
+	while (finished != true)
+	{
+		pthread_mutex_lock(&philos->lock);
+		if (philos->thinker[id]->life == false)
+			return (pthread_mutex_unlock(&philos->lock), false);
+		finished = finished_action(start_time, duration);
+		pthread_mutex_unlock(&philos->lock);
+		usleep(1000);
+	}
 	return (true);
 }
 
