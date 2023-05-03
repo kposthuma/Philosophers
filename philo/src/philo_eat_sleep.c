@@ -6,11 +6,40 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/02 16:15:56 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/02 18:35:08 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/03 11:33:35 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include<philosophers.h>
+
+bool	finished_action(t_time start_time, t_time duration)
+{	
+	t_time	curr_time;
+
+	curr_time = get_time();
+	if (curr_time - start_time <= duration)
+		return (false);
+	return (true);
+}
+
+bool	action_loop(t_philos *philos, size_t id, t_time duration)
+{
+	bool	finished;
+	t_time	start_time;
+
+	start_time = get_time();
+	finished = finished_action(start_time, duration);
+	while (finished != true)
+	{
+		pthread_mutex_lock(&philos->lock);
+		if (philos->thinker[id]->life == false)
+			return (pthread_mutex_unlock(&philos->lock), false);
+		finished = finished_action(start_time, duration);
+		pthread_mutex_unlock(&philos->lock);
+		usleep(1000);
+	}
+	return (true);
+}
 
 void	*philo_eat(t_philos *philos, size_t id, size_t id2)
 {
@@ -37,7 +66,6 @@ void	*philo_eat(t_philos *philos, size_t id, size_t id2)
 	return (philo_sleep(philos, id), NULL);
 }
 
-
 void	*philo_sleep(t_philos *philos, size_t id)
 {
 	t_time	start_time;
@@ -62,4 +90,3 @@ void	*philo_sleep(t_philos *philos, size_t id)
 	pthread_mutex_unlock(&philos->lock);
 	return (NULL);
 }
-

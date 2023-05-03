@@ -6,11 +6,40 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/20 17:40:29 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/02 18:25:40 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/03 13:00:10 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include<philosophers.h>
+
+int	main(int argc, char **argv)
+{
+	t_philos	*philos;
+	pthread_t	*thread;
+	pthread_t	thread2;
+	size_t		x;
+
+	if (check_input(argc, argv) != 0)
+		return (1);
+	philos = init_philos(argv);
+	thread = malloc((philos->number_of_philos + 1) * sizeof(pthread_t));
+	if (!thread || !philos)
+		return (philo_error(NULL), 1);
+	pthread_mutex_init(&philos->lock, NULL);
+	x = 0;
+	while (x < philos->number_of_philos)
+		pthread_create(&thread[x++], NULL, &philo_thread, (void *)philos);
+	pthread_create(&thread[x], NULL, &is_dead, (void *)philos);
+	if (philos->number_of_meals != 0)
+		pthread_create(&thread2, NULL, &has_eaten, (void *)philos);
+	x = 0;
+	while (x < (philos->number_of_philos + 1))
+		pthread_join(thread[x++], NULL);
+	if (philos->number_of_meals != 0)
+		pthread_join(thread2, NULL);
+	pthread_mutex_destroy(&philos->lock);
+	return (philo_liberation(philos), free(thread), 0);
+}
 
 t_thinker	**make_philos(size_t num)
 {
@@ -25,7 +54,7 @@ t_thinker	**make_philos(size_t num)
 	{
 		thinker[i] = malloc(sizeof(t_thinker));
 		if (!thinker[i])
-			return (NULL); //free everything
+			return (free_thinkers(thinker, i), NULL);
 		thinker[i]->philo_id = i + 1;
 		thinker[i]->fork = 0;
 		thinker[i]->life = true;
@@ -43,16 +72,16 @@ t_philos	*init_philos(char **argv)
 
 	philos = malloc(sizeof(t_philos));
 	if (!philos)
-		return (philo_error("Memory allocation error\n"), NULL);
+		return (philo_error(NULL), NULL);
+	philos->thinker = make_philos(arg_to_int(argv[1]));
+	if (!philos->thinker)
+		return (philo_error(NULL), free(philos), NULL);
 	philos->number_of_philos = arg_to_int(argv[1]);
 	philos->time_to_die = arg_to_int(argv[2]);
 	philos->time_to_eat = arg_to_int(argv[3]);
 	philos->time_to_sleep = arg_to_int(argv[4]);
 	philos->number_of_meals = arg_to_int(argv[5]);
 	philos->start_time = get_time();
-	philos->thinker = make_philos(philos->number_of_philos);
-	if (!philos->thinker)
-		return (philo_error("Memory allocation error\n"), NULL);
 	return (philos);
 }
 
@@ -62,7 +91,7 @@ int	check_input(int argc, char **argv)
 		return (philo_error("Incorrect number of arguments.\n\
 Please input either four or five arguments.\n"), 1);
 	if (arg_to_int(argv[1]) < 1 || arg_to_int(argv[2]) < 1 || arg_to_int(argv[3]
-		) < 1 || arg_to_int(argv[4]) < 1 || arg_to_int(argv[5]) < 0)
+		) < 1 || arg_to_int(argv[4]) < 1 || arg_to_int(argv[5]) < 1)
 		return (philo_error("Invalid argument value.\n\
 Please input only posisitve integers.\n"), 1);
 	return (0);
@@ -73,38 +102,4 @@ Please input only posisitve integers.\n"), 1);
 // 	system("leaks philo");
 // }
 
-int	main(int argc, char **argv)
-{
-	t_philos	*philos;
-	pthread_t	*thread;
-	pthread_t	thread2;
-	size_t		x;
-
-	if (check_input(argc, argv) != 0)
-		return (1);
-	philos = init_philos(argv);
-	thread = malloc((philos->number_of_philos + 1) * sizeof(pthread_t));
-	if (!thread || !philos)
-		return (philo_error("Memory allocation error\n"), 1);
-	pthread_mutex_init(&philos->lock, NULL);
-	x = 0;
-	while (x < philos->number_of_philos)
-		pthread_create(&thread[x++], NULL, &philo_thread, (void *)philos);
-	pthread_create(&thread[x], NULL, &is_dead, (void *)philos);
-	if (philos->number_of_meals != 0)
-		pthread_create(&thread2, NULL, &has_eaten, (void *)philos);
-	x = 0;
-	while (x < philos->number_of_philos)
-		pthread_join(thread[x++], NULL);
-	pthread_join(thread[x], NULL);
-	if (philos->number_of_meals != 0)
-		pthread_join(thread2, NULL);
-	pthread_mutex_destroy(&philos->lock);
-	// while (x)
-	// 	pthread_detach(thread[x--]);
-	// if (philos->number_of_meals != 0)
-	// 	pthread_detach(thread2);
-	return (0);
-}
-
-//TODO free everything 
+	// atexit(f);

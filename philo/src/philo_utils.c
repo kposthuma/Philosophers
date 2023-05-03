@@ -6,44 +6,37 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/25 12:30:35 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/02 18:34:51 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/03 12:58:42 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include<philosophers.h>
 
-bool	finished_action(t_time start_time, t_time duration)
-{	
-	t_time	curr_time;
-
-	curr_time = get_time();
-	if (curr_time - start_time <= duration)
-		return (false);
-	return (true);
+void	philo_liberation(t_philos *philos)
+{
+	free_thinkers(philos->thinker, philos->number_of_philos);
+	free(philos);
 }
 
-bool	action_loop(t_philos *philos, size_t id, t_time duration)
+void	free_thinkers(t_thinker **thinker, size_t count)
 {
-	bool	finished;
-	t_time	start_time;
+	size_t	i;
 
-	start_time = get_time();
-	finished = finished_action(start_time, duration);
-	while (finished != true)
+	i = 0;
+	while (i < count)
 	{
-		pthread_mutex_lock(&philos->lock);
-		if (philos->thinker[id]->life == false)
-			return (pthread_mutex_unlock(&philos->lock), false);
-		finished = finished_action(start_time, duration);
-		pthread_mutex_unlock(&philos->lock);
-		usleep(1000);
+		free(thinker[i]);
+		i++;
 	}
-	return (true);
+	free(thinker);
 }
 
 void	philo_error(char *message)
 {
-	printf("%s", message);
+	if (!message)
+		printf("Memory allocation error\n");
+	else
+		printf("%s", message);
 }
 
 t_time	get_time(void)

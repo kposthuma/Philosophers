@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/19 12:55:25 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/02 18:43:15 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/03 12:58:07 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,18 +55,20 @@ t_philos	*init_philos(char **argv);
 int			check_input(int argc, char **argv);
 
 // philo_utils.c
-bool		finished_action(t_time start_time, t_time duration);
-bool		action_loop(t_philos *philos, size_t id, t_time duration);
+void		philo_liberation(t_philos *philos);
+void		free_thinkers(t_thinker **thinker, size_t count);
 void		philo_error(char *message);
-int			arg_to_int(char *arg);
 t_time		get_time(void);
+int			arg_to_int(char *arg);
 
 // philosophers.c
-void		*philo_thread(void *arg);
-void		philo_loop(t_philos *philos, size_t id, size_t id2);
 bool		take_forks(t_philos *philos, size_t id, size_t id2);
+void		philo_loop(t_philos *philos, size_t id, size_t id2);
+void		*philo_thread(void *arg);
 
 // philo_eat_sleep.c
+bool		finished_action(t_time start_time, t_time duration);
+bool		action_loop(t_philos *philos, size_t id, t_time duration);
 void		*philo_eat(t_philos *philos, size_t id, size_t id2);
 void		*philo_sleep(t_philos *philos, size_t id);
 
@@ -74,6 +76,6 @@ void		*philo_sleep(t_philos *philos, size_t id);
 void		death(t_philos *philos);
 bool		death_loop(t_philos *philos);
 void		*is_dead(void *arg);
-bool		food_loop(t_philos *philos, size_t end);
+bool		done_eating(t_philos *philos);
 void		*has_eaten(void *arg);
 #endif

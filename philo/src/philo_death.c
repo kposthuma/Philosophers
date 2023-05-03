@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/25 12:32:58 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/02 19:35:21 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/03 11:07:40 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,26 @@ void	*is_dead(void *arg)
 	return (NULL);
 }
 
+bool	done_eating(t_philos *philos)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < philos->number_of_philos)
+	{
+		if (philos->thinker[i]->finished == false)
+			return (false);
+		i++;
+	}
+	death(philos);
+	return (true);
+}
+
 void	*has_eaten(void *arg)
 {
 	t_philos	*philos;
 	size_t		i;
-	size_t		end;
 
-	end = 0;
 	philos = (t_philos *)arg;
 	while (true)
 	{
@@ -73,18 +86,13 @@ void	*has_eaten(void *arg)
 		pthread_mutex_lock(&philos->lock);
 		while (i < philos->number_of_philos)
 		{
-			if (philos->thinker[i]->meals_eaten == philos->number_of_meals
+			if (philos->thinker[i]->meals_eaten >= philos->number_of_meals
 				&& philos->thinker[i]->finished != true)
-			{
 				philos->thinker[i]->finished = true;
-				end++;
-				if (philos->thinker[i]->life == false)
-					return (pthread_mutex_unlock(&philos->lock), NULL);
-			}
 			i++;
 		}
-		if (end == philos->number_of_philos)
-			return (death(philos), pthread_mutex_unlock(&philos->lock), NULL);
+		if (done_eating(philos) == true || philos->thinker[1]->life == false)
+			return (pthread_mutex_unlock(&philos->lock), NULL);
 		pthread_mutex_unlock(&philos->lock);
 		usleep(100);
 	}
