@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/25 12:30:35 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/03 12:58:42 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/03 16:11:12 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 void	philo_liberation(t_philos *philos)
 {
-	free_thinkers(philos->thinker, philos->number_of_philos);
+	if (philos->thinker)
+		free_thinkers(philos->thinker, philos->number_of_philos);
 	free(philos);
 }
 
@@ -41,11 +42,10 @@ void	philo_error(char *message)
 
 t_time	get_time(void)
 {
-	t_time			time;
 	struct timeval	curr;
 
 	gettimeofday(&curr, NULL);
-	return (time = (curr.tv_sec * 1000 + curr.tv_usec / 1000));
+	return ((curr.tv_sec * 1000 + curr.tv_usec / 1000));
 }
 
 int	arg_to_int(char *arg)

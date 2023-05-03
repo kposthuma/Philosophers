@@ -6,11 +6,17 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/20 17:40:29 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/03 13:33:13 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/03 16:11:57 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include<philosophers.h>
+
+void	f(void)
+{
+	system("leaks philo");
+}
+	// atexit(f);
 
 int	main(int argc, char **argv)
 {
@@ -22,9 +28,9 @@ int	main(int argc, char **argv)
 	if (check_input(argc, argv) != 0)
 		return (1);
 	philos = init_philos(argv);
-	thread = malloc((philos->number_of_philos + 1) * sizeof(pthread_t));
+	thread = malloc((arg_to_int(argv[1]) + 1) * sizeof(pthread_t));
 	if (!thread || !philos)
-		return (philo_error(NULL), 1);
+		return (philo_error(NULL), free(thread), 1);
 	pthread_mutex_init(&philos->lock, NULL);
 	x = 0;
 	while (x < philos->number_of_philos)
@@ -72,10 +78,10 @@ t_philos	*init_philos(char **argv)
 
 	philos = malloc(sizeof(t_philos));
 	if (!philos)
-		return (philo_error(NULL), NULL);
+		return (NULL);
 	philos->thinker = make_philos(arg_to_int(argv[1]));
 	if (!philos->thinker)
-		return (philo_error(NULL), free(philos), NULL);
+		return (free(philos), NULL);
 	philos->number_of_philos = arg_to_int(argv[1]);
 	philos->time_to_die = arg_to_int(argv[2]);
 	philos->time_to_eat = arg_to_int(argv[3]);
@@ -91,15 +97,8 @@ int	check_input(int argc, char **argv)
 		return (philo_error("Incorrect number of arguments.\n\
 Please input either four or five arguments.\n"), 1);
 	if (arg_to_int(argv[1]) < 1 || arg_to_int(argv[2]) < 1 || arg_to_int(argv[3]
-		) < 1 || arg_to_int(argv[4]) < 1 || arg_to_int(argv[5]) < 1)
+		) < 1 || arg_to_int(argv[4]) < 1 || arg_to_int(argv[5]) < 0)
 		return (philo_error("Invalid argument value.\n\
 Please input only posisitve integers.\n"), 1);
 	return (0);
 }
-
-// void	f(void)
-// {
-// 	system("leaks philo");
-// }
-
-	// atexit(f);
