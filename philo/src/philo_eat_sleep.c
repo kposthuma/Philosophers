@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/02 16:15:56 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/03 11:33:35 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/03 13:32:44 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ bool	action_loop(t_philos *philos, size_t id, t_time duration)
 			return (pthread_mutex_unlock(&philos->lock), false);
 		finished = finished_action(start_time, duration);
 		pthread_mutex_unlock(&philos->lock);
-		usleep(1000);
+		usleep(100);
 	}
 	return (true);
 }

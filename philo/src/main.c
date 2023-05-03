@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/20 17:40:29 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/03 13:06:22 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/03 13:33:13 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int	check_input(int argc, char **argv)
 		return (philo_error("Incorrect number of arguments.\n\
 Please input either four or five arguments.\n"), 1);
 	if (arg_to_int(argv[1]) < 1 || arg_to_int(argv[2]) < 1 || arg_to_int(argv[3]
-		) < 1 || arg_to_int(argv[4]) < 1 || arg_to_int(argv[5]) < 0)
+		) < 1 || arg_to_int(argv[4]) < 1 || arg_to_int(argv[5]) < 1)
 		return (philo_error("Invalid argument value.\n\
 Please input only posisitve integers.\n"), 1);
 	return (0);
