@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/19 12:55:25 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/04 11:53:35 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/07 14:05:49 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void		*philo_sleep(t_philos *philos, size_t id);
 
 // philo_death.c
 void		death(t_philos *philos);
-bool		death_loop(t_philos *philos, size_t count);
+size_t		death_loop(t_philos *philos, size_t count);
 void		*is_dead(void *arg);
 bool		done_eating(t_philos *philos, size_t count);
 void		*has_eaten(void *arg);

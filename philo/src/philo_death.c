@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/25 12:32:58 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/07 13:16:48 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/07 14:20:14 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,43 +24,51 @@ void	death(t_philos *philos)
 	}
 }
 
-bool	death_loop(t_philos *philos, size_t count)
+size_t	death_loop(t_philos *philos, size_t count)
 {
 	size_t	i;
 	t_time	now;
 
 	i = 0;
-	now = get_time();
 	while (i < count)
 	{
-		pthread_mutex_lock(&philos->lock);
+		now = get_time();
 		if (now - philos->thinker[i]->last_supper
 			>= philos->thinker[i]->time_to_die)
 		{
-			now = get_time() - philos->thinker[i]->start_time;
-			printf("%llu %lu %s", now, philos->thinker[i]->philo_id,
-				"died\n");
+			pthread_mutex_lock(&philos->lock);
 			death(philos);
+			return (pthread_mutex_unlock(&philos->lock), i + 1);
 		}
 		if (philos->thinker[i]->life == false)
-			return (pthread_mutex_unlock(&philos->lock), false);
-		pthread_mutex_unlock(&philos->lock);
+			return (i + 1);
 		i++;
 	}
-	return (true);
+	return (0);
 }
 
 void	*is_dead(void *arg)
 {
 	t_philos	*philos;
 	size_t		count;
+	size_t		id;
+	t_time		tod;
 
 	philos = (t_philos *)arg;
 	pthread_mutex_lock(&philos->lock);
 	count = philos->number_of_philos;
 	pthread_mutex_unlock(&philos->lock);
-	while (death_loop(philos, count) == true)
+	usleep(100);
+	id = 0;
+	while (id == 0)
+	{
+		id = death_loop(philos, count);
 		usleep(100);
+	}
+	usleep(100);
+	tod = get_time() - philos->thinker[id]->start_time;
+	if (done_eating(philos, count) == false)
+		printf("%llu %lu died\n", tod, philos->thinker[id]->philo_id);
 	return (NULL);
 }
 
