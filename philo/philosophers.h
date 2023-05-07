@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/19 12:55:25 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/03 12:58:07 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/04 11:53:35 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,12 @@ typedef struct s_thinker
 	bool	life;
 	size_t	meals_eaten;
 	bool	finished;
+	size_t	number_of_philos;
+	t_time	time_to_die;
+	t_time	time_to_eat;
+	t_time	time_to_sleep;
+	size_t	number_of_meals;
+	t_time	start_time;
 }	t_thinker;
 
 typedef struct s_philos
@@ -50,7 +56,8 @@ typedef struct s_philos
 }	t_philos;
 
 // main.c
-t_thinker	**make_philos(size_t num);
+void		philo_copy_data(t_thinker *thinker, t_philos *philos);
+t_thinker	**make_philos(size_t num, t_philos *philos);
 t_philos	*init_philos(char **argv);
 int			check_input(int argc, char **argv);
 
@@ -74,8 +81,8 @@ void		*philo_sleep(t_philos *philos, size_t id);
 
 // philo_death.c
 void		death(t_philos *philos);
-bool		death_loop(t_philos *philos);
+bool		death_loop(t_philos *philos, size_t count);
 void		*is_dead(void *arg);
-bool		done_eating(t_philos *philos);
+bool		done_eating(t_philos *philos, size_t count);
 void		*has_eaten(void *arg);
 #endif

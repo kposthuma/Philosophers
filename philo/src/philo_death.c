@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/25 12:32:58 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/03 11:07:40 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/07 13:16:48 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,47 +24,52 @@ void	death(t_philos *philos)
 	}
 }
 
-bool	death_loop(t_philos *philos)
+bool	death_loop(t_philos *philos, size_t count)
 {
 	size_t	i;
 	t_time	now;
 
 	i = 0;
 	now = get_time();
-	pthread_mutex_lock(&philos->lock);
-	while (i < philos->number_of_philos)
+	while (i < count)
 	{
-		if (now - philos->thinker[i]->last_supper >= philos->time_to_die)
+		pthread_mutex_lock(&philos->lock);
+		if (now - philos->thinker[i]->last_supper
+			>= philos->thinker[i]->time_to_die)
 		{
-			now = get_time() - philos->start_time;
+			now = get_time() - philos->thinker[i]->start_time;
 			printf("%llu %lu %s", now, philos->thinker[i]->philo_id,
 				"died\n");
 			death(philos);
 		}
 		if (philos->thinker[i]->life == false)
 			return (pthread_mutex_unlock(&philos->lock), false);
+		pthread_mutex_unlock(&philos->lock);
 		i++;
 	}
-	pthread_mutex_unlock(&philos->lock);
 	return (true);
 }
 
 void	*is_dead(void *arg)
 {
 	t_philos	*philos;
+	size_t		count;
 
 	philos = (t_philos *)arg;
-	while (death_loop(philos) == true)
-		usleep(10000);
+	pthread_mutex_lock(&philos->lock);
+	count = philos->number_of_philos;
+	pthread_mutex_unlock(&philos->lock);
+	while (death_loop(philos, count) == true)
+		usleep(100);
 	return (NULL);
 }
 
-bool	done_eating(t_philos *philos)
+bool	done_eating(t_philos *philos, size_t count)
 {
 	size_t	i;
 
 	i = 0;
-	while (i < philos->number_of_philos)
+	while (i < count)
 	{
 		if (philos->thinker[i]->finished == false)
 			return (false);
@@ -78,23 +83,26 @@ void	*has_eaten(void *arg)
 {
 	t_philos	*philos;
 	size_t		i;
+	size_t		count;
 
 	philos = (t_philos *)arg;
+	pthread_mutex_lock(&philos->lock);
+	count = philos->number_of_philos;
+	pthread_mutex_unlock(&philos->lock);
 	while (true)
 	{
 		i = 0;
-		pthread_mutex_lock(&philos->lock);
-		while (i < philos->number_of_philos)
+		while (i < count)
 		{
 			if (philos->thinker[i]->meals_eaten >= philos->number_of_meals
 				&& philos->thinker[i]->finished != true)
 				philos->thinker[i]->finished = true;
 			i++;
 		}
-		if (done_eating(philos) == true || philos->thinker[1]->life == false)
-			return (pthread_mutex_unlock(&philos->lock), NULL);
-		pthread_mutex_unlock(&philos->lock);
-		usleep(100);
+		if (done_eating(philos, count) == true
+			|| philos->thinker[0]->life == false)
+			return (NULL);
+		usleep(10);
 	}
 	return (NULL);
 }

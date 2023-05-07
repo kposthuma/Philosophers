@@ -6,34 +6,37 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/19 11:52:07 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/02 18:25:07 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/07 13:13:49 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include<philosophers.h>
 
 bool	take_forks(t_philos *philos, size_t id, size_t id2)
-{
-	pthread_mutex_lock(&philos->lock);
+{	
 	if (philos->thinker[id]->life == false)
-		return (pthread_mutex_unlock(&philos->lock), NULL);
+		return (NULL);
+	pthread_mutex_lock(&philos->lock);
 	if (philos->thinker[id]->fork == 0)
 	{
 		printf("%llu %lu %s", get_time() - philos->start_time,
 			philos->thinker[id]->philo_id, "has taken a fork\n");
 		philos->thinker[id]->fork = 1;
 	}
+	pthread_mutex_unlock(&philos->lock);
 	if (philos->thinker[id]->life == false)
-		return (pthread_mutex_unlock(&philos->lock), NULL);
+		return (NULL);
+	pthread_mutex_lock(&philos->lock);
 	if (philos->thinker[id2]->fork == 0)
 	{
 		printf("%llu %lu %s", get_time() - philos->start_time,
 			philos->thinker[id]->philo_id, "has taken a fork\n");
 		philos->thinker[id2]->fork = 2;
 	}
+	pthread_mutex_unlock(&philos->lock);
 	if (philos->thinker[id]->fork == 1 && philos->thinker[id2]->fork == 2)
-		return (pthread_mutex_unlock(&philos->lock), true);
-	return (pthread_mutex_unlock(&philos->lock), false);
+		return (true);
+	return (false);
 }
 
 void	philo_loop(t_philos *philos, size_t id, size_t id2)
@@ -67,11 +70,11 @@ void	*philo_thread(void *arg)
 	else
 		id2 = id - 1;
 	i++;
-	printf("%llu %lu %s", get_time() - philos->start_time,
-		philos->thinker[id]->philo_id, "is thinking\n");
 	pthread_mutex_unlock(&philos->lock);
+	printf("%llu %lu %s", get_time() - philos->thinker[id]->start_time,
+		philos->thinker[id]->philo_id, "is thinking\n");
 	if (id % 2 == 1)
-		usleep(10000);
+		usleep(100);
 	philo_loop(philos, id, id2);
 	return (NULL);
 }
