@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/02 16:15:56 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/07 13:00:02 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/10 12:25:36 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,23 +34,21 @@ bool	action_loop(t_philos *philos, size_t id, t_time duration)
 		if (philos->thinker[id]->life == false)
 			return (false);
 		finished = finished_action(start_time, duration);
-		usleep(10);
+		usleep(200);
 	}
 	return (true);
 }
 
 void	*philo_eat(t_philos *philos, size_t id, size_t id2)
 {
-	t_time	start_time;
-	t_time	now;
 	bool	life;
 
-	start_time = get_time();
-	if (philos->thinker[id]->life == false)
-		return (NULL);
-	now = get_time() - philos->thinker[id]->start_time;
-	printf("%llu %lu is eating\n", now, philos->thinker[id]->philo_id);
+	if (philos->thinker[id]->life == true)
+		printf("%llu\t%lu\tis eating\n", get_time() - philos->thinker[id]
+			->start_time, philos->thinker[id]->philo_id);
+	pthread_mutex_lock(&philos->lock);
 	philos->thinker[id]->last_supper = get_time();
+	pthread_mutex_unlock(&philos->lock);
 	life = action_loop(philos, id, philos->thinker[id]->time_to_eat);
 	if (life == false)
 		return (NULL);
@@ -64,21 +62,14 @@ void	*philo_eat(t_philos *philos, size_t id, size_t id2)
 
 void	*philo_sleep(t_philos *philos, size_t id)
 {
-	t_time	start_time;
-	t_time	now;
 	bool	life;
 
-	start_time = get_time();
-	if (philos->thinker[id]->life == false)
-		return (NULL);
-	now = get_time() - philos->thinker[id]->start_time;
-	printf("%llu %lu is sleeping\n", now, philos->thinker[id]->philo_id);
+	if (philos->thinker[id]->life == true)
+		printf("%llu\t%lu\tis sleeping\n", get_time() - philos->thinker[id]
+			->start_time, philos->thinker[id]->philo_id);
 	life = action_loop(philos, id, philos->thinker[id]->time_to_sleep);
-	if (life == false)
-		return (NULL);
-	if (philos->thinker[id]->life == false)
-		return (NULL);
-	now = get_time() - philos->thinker[id]->start_time;
-	printf("%llu %lu is thinking\n", now, philos->thinker[id]->philo_id);
+	if (life == true && philos->thinker[id]->life == true)
+		printf("%llu\t%lu\tis thinking\n", get_time() - philos->thinker[id]
+			->start_time, philos->thinker[id]->philo_id);
 	return (NULL);
 }

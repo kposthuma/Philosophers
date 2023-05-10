@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/20 17:40:29 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/07 15:35:56 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/09 17:28:07 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,27 +18,28 @@
 // }
 	// atexit(f);
 
-void	fork_states(t_philos *philos)
-{
-	size_t	i;
+// void	fork_states(t_philos *philos)
+// {
+// 	size_t	i;
 
-	i = 0;
-	while (i < philos->number_of_philos)
-	{
-		if (philos->thinker[i]->fork == 0)
-			printf("fork %lu	is not held\n", i + 1);
-		else if (philos->thinker[i]->fork == 1)
-			printf("fork %lu	is held by philo %lu\n", i + 1,
-				philos->thinker[i]->philo_id);
-		else if (philos->thinker[i]->fork == 2 && i < philos->number_of_philos - 1)
-			printf("fork %lu	is held by philo %lu\n", i + 1,
-				philos->thinker[i + 1]->philo_id);
-		else
-			printf("fork %lu	is held by philo %lu\n", i + 1,
-				philos->thinker[0]->philo_id);
-		i++;
-	}
-}
+// 	i = 0;
+// 	while (i < philos->number_of_philos)
+// 	{
+// 		if (philos->thinker[i]->fork == 0)
+// 			printf("fork %lu	is not held\n", i + 1);
+// 		else if (philos->thinker[i]->fork == 1)
+// 			printf("fork %lu	is held by philo %lu\n", i + 1,
+// 				philos->thinker[i]->philo_id);
+// 		else if (philos->thinker[i]->fork == 2
+// 			&& i < philos->number_of_philos - 1)
+// 			printf("fork %lu	is held by philo %lu\n", i + 1,
+// 				philos->thinker[i + 1]->philo_id);
+// 		else
+// 			printf("fork %lu	is held by philo %lu\n", i + 1,
+// 				philos->thinker[0]->philo_id);
+// 		i++;
+// 	}
+// }
 
 int	main(int argc, char **argv)
 {
@@ -66,7 +67,6 @@ int	main(int argc, char **argv)
 	if (philos->number_of_meals != 0)
 		pthread_join(thread2, NULL);
 	pthread_mutex_destroy(&philos->lock);
-	fork_states(philos);
 	return (philo_liberation(philos), free(thread), 0);
 }
 

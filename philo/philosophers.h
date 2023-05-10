@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/19 12:55:25 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/07 15:21:15 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/09 14:39:31 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,11 @@ t_time		get_time(void);
 int			arg_to_int(char *arg);
 
 // philosophers.c
+void		fork_message(t_philos *philos, size_t f_id, size_t p_id, int value);
 bool		take_forks(t_philos *philos, size_t id, size_t id2);
 void		philo_loop(t_philos *philos, size_t id, size_t id2);
 void		*philo_thread(void *arg);
+void		even_wait(t_philos *philos, size_t id);
 
 // philo_eat_sleep.c
 bool		finished_action(t_time start_time, t_time duration);
