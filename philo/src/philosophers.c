@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/19 11:52:07 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/10 12:28:58 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/10 13:25:01 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,14 @@
 
 void	fork_message(t_philos *philos, size_t f_id, size_t p_id, int value)
 {
-	if (philos->thinker[f_id]->fork == 0
-		&& philos->thinker[p_id]->life == true)
+	int		fval;
+	bool	life;
+
+	pthread_mutex_lock(&philos->lock);
+	fval = philos->thinker[f_id]->fork;
+	life = philos->thinker[p_id]->life;
+	pthread_mutex_unlock(&philos->lock);
+	if (fval == 0 && life == true)
 	{
 		printf("%llu\t%lu\thas taken a fork\n", get_time() - philos
 			->start_time, philos->thinker[p_id]->philo_id);
@@ -27,15 +33,18 @@ void	fork_message(t_philos *philos, size_t f_id, size_t p_id, int value)
 
 bool	take_forks(t_philos *philos, size_t id, size_t id2)
 {	
-	// pthread_mutex_lock(&philos->lock);
-	if (philos->thinker[id2]->fork != 1)
+	int	fork_two;
+	int	fork_one;
+
+	pthread_mutex_lock(&philos->lock);
+	fork_two = philos->thinker[id2]->fork;
+	fork_one = philos->thinker[id]->fork;
+	pthread_mutex_unlock(&philos->lock);
+	if (fork_two != 1 && fork_one == 0)
 		fork_message(philos, id, id, 1);
-	// pthread_mutex_unlock(&philos->lock);
-	// pthread_mutex_lock(&philos->lock);
-	if (philos->thinker[id]->fork != 2)
+	if (fork_one != 2 && fork_two == 0)
 		fork_message(philos, id2, id, 2);
-	// pthread_mutex_unlock(&philos->lock);
-	if (philos->thinker[id]->fork == 1 && philos->thinker[id2]->fork == 2)
+	if (fork_one == 1 && fork_two == 2)
 		return (true);
 	return (false);
 }
@@ -43,12 +52,22 @@ bool	take_forks(t_philos *philos, size_t id, size_t id2)
 void	philo_loop(t_philos *philos, size_t id, size_t id2)
 {
 	bool	has_forks;
+	bool	living;
 
-	while (philos->thinker[id]->life == true)
+	pthread_mutex_lock(&philos->lock);
+	living = philos->thinker[id]->life;
+	pthread_mutex_unlock(&philos->lock);
+	while (living == true)
 	{
-		if (philos->thinker[id]->life == true)
+		pthread_mutex_lock(&philos->lock);
+		living = philos->thinker[id]->life;
+		pthread_mutex_unlock(&philos->lock);
+		if (living == true)
 			has_forks = take_forks(philos, id, id2);
-		if (philos->thinker[id]->life == true && has_forks == true)
+		pthread_mutex_lock(&philos->lock);
+		living = philos->thinker[id]->life;
+		pthread_mutex_unlock(&philos->lock);
+		if (living == true && has_forks == true)
 			philo_eat(philos, id, id2);
 	}
 }

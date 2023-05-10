@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/20 17:40:29 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/09 17:28:07 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/10 14:43:51 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 // {
 // 	system("leaks philo");
 // }
-	// atexit(f);
 
 // void	fork_states(t_philos *philos)
 // {
