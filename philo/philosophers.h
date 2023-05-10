@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/19 12:55:25 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/09 14:39:31 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/10 16:52:56 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,56 +35,49 @@ typedef struct s_thinker
 	bool	life;
 	size_t	meals_eaten;
 	bool	finished;
-	size_t	number_of_philos;
-	t_time	time_to_die;
-	t_time	time_to_eat;
-	t_time	time_to_sleep;
-	size_t	number_of_meals;
-	t_time	start_time;
 }	t_thinker;
 
 typedef struct s_philos
 {
-	size_t			number_of_philos;
+	size_t			nmb_of_philos;
 	t_time			time_to_die;
 	t_time			time_to_eat;
 	t_time			time_to_sleep;
-	size_t			number_of_meals;
+	size_t			nmb_of_meals;
 	t_time			start_time;
 	pthread_mutex_t	lock;
-	t_thinker		**thinker;
+	t_thinker		**phils;
 }	t_philos;
 
 // main.c
-void		philo_copy_data(t_thinker *thinker, t_philos *philos);
-t_thinker	**make_philos(size_t num, t_philos *philos);
+t_thinker	**make_philos(size_t num);
 t_philos	*init_philos(char **argv);
 int			check_input(int argc, char **argv);
 
 // philo_utils.c
-void		philo_liberation(t_philos *philos);
-void		free_thinkers(t_thinker **thinker, size_t count);
+void		philo_liberation(t_philos *strc);
+void		free_thinkers(t_thinker **phils, size_t count);
 void		philo_error(char *message);
 t_time		get_time(void);
 int			arg_to_int(char *arg);
 
 // philosophers.c
-void		fork_message(t_philos *philos, size_t f_id, size_t p_id, int value);
-bool		take_forks(t_philos *philos, size_t id, size_t id2);
-void		philo_loop(t_philos *philos, size_t id, size_t id2);
+void		fork_message(t_philos *strc, size_t f_id, size_t p_id, int value);
+bool		take_forks(t_philos *strc, size_t id, size_t id2);
+void		philo_loop(t_philos *strc, size_t id, size_t id2);
 void		*philo_thread(void *arg);
-void		even_wait(t_philos *philos, size_t id);
+void		even_wait(t_philos *strc);
 
 // philo_eat_sleep.c
 bool		finished_action(t_time start_time, t_time duration);
-bool		action_loop(t_philos *philos, size_t id, t_time duration);
-void		*philo_eat(t_philos *philos, size_t id, size_t id2);
-void		*philo_sleep(t_philos *philos, size_t id);
+bool		action_loop(t_philos *strc, size_t id, t_time duration);
+void		*philo_eat(t_philos *pstrc, size_t id, size_t id2);
+void		*philo_sleep(t_philos *strc, size_t id);
 
 // philo_death.c
-void		death(t_philos *philos);
-bool		death_loop(t_philos *philos, size_t count);
+void		death(t_philos *strc);
+bool		death_loop(t_philos *strc, size_t count);
 void		*is_dead(void *arg);
-bool		done_eating(t_philos *philos, size_t count);
+bool		done_eating(t_philos *strc, size_t count);
 void		*has_eaten(void *arg);
 #endif

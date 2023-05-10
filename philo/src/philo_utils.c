@@ -6,30 +6,30 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/25 12:30:35 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/03 16:11:12 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/10 16:30:51 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include<philosophers.h>
 
-void	philo_liberation(t_philos *philos)
+void	philo_liberation(t_philos *strc)
 {
-	if (philos->thinker)
-		free_thinkers(philos->thinker, philos->number_of_philos);
-	free(philos);
+	if (strc->phils)
+		free_thinkers(strc->phils, strc->nmb_of_philos);
+	free(strc);
 }
 
-void	free_thinkers(t_thinker **thinker, size_t count)
+void	free_thinkers(t_thinker **phils, size_t count)
 {
 	size_t	i;
 
 	i = 0;
 	while (i < count)
 	{
-		free(thinker[i]);
+		free(phils[i]);
 		i++;
 	}
-	free(thinker);
+	free(phils);
 }
 
 void	philo_error(char *message)

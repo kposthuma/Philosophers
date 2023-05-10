@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/02 16:15:56 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/10 13:30:21 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/10 16:49:08 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ bool	finished_action(t_time start_time, t_time duration)
 	return (true);
 }
 
-bool	action_loop(t_philos *philos, size_t id, t_time duration)
+bool	action_loop(t_philos *strc, size_t id, t_time duration)
 {
 	bool	finished;
 	bool	living;
@@ -32,9 +32,9 @@ bool	action_loop(t_philos *philos, size_t id, t_time duration)
 	finished = finished_action(start_time, duration);
 	while (finished != true)
 	{
-		pthread_mutex_lock(&philos->lock);
-		living = philos->thinker[id]->life;
-		pthread_mutex_unlock(&philos->lock);
+		pthread_mutex_lock(&strc->lock);
+		living = strc->phils[id]->life;
+		pthread_mutex_unlock(&strc->lock);
 		if (living == false)
 			return (false);
 		finished = finished_action(start_time, duration);
@@ -43,41 +43,41 @@ bool	action_loop(t_philos *philos, size_t id, t_time duration)
 	return (true);
 }
 
-void	*philo_eat(t_philos *philos, size_t id, size_t id2)
+void	*philo_eat(t_philos *strc, size_t id, size_t id2)
 {
 	bool	life;
 
-	pthread_mutex_lock(&philos->lock);
-	life = philos->thinker[id]->life;
-	philos->thinker[id]->last_supper = get_time();
-	pthread_mutex_unlock(&philos->lock);
+	pthread_mutex_lock(&strc->lock);
+	life = strc->phils[id]->life;
+	strc->phils[id]->last_supper = get_time();
+	pthread_mutex_unlock(&strc->lock);
 	if (life == true)
-		printf("%llu\t%lu\tis eating\n", get_time() - philos->thinker[id]
-			->start_time, philos->thinker[id]->philo_id);
-	life = action_loop(philos, id, philos->thinker[id]->time_to_eat);
+		printf("%llu\t%lu\tis eating\n", get_time() - strc->start_time,
+			strc->phils[id]->philo_id);
+	life = action_loop(strc, id, strc->time_to_eat);
 	if (life == false)
 		return (NULL);
-	pthread_mutex_lock(&philos->lock);
-	philos->thinker[id]->fork = 0;
-	philos->thinker[id2]->fork = 0;
-	philos->thinker[id]->meals_eaten++;
-	pthread_mutex_unlock(&philos->lock);
-	return (philo_sleep(philos, id), NULL);
+	pthread_mutex_lock(&strc->lock);
+	strc->phils[id]->fork = 0;
+	strc->phils[id2]->fork = 0;
+	strc->phils[id]->meals_eaten++;
+	pthread_mutex_unlock(&strc->lock);
+	return (philo_sleep(strc, id), NULL);
 }
 
-void	*philo_sleep(t_philos *philos, size_t id)
+void	*philo_sleep(t_philos *strc, size_t id)
 {
 	bool	life;
 
-	pthread_mutex_lock(&philos->lock);
-	life = philos->thinker[id]->life;
-	pthread_mutex_unlock(&philos->lock);
+	pthread_mutex_lock(&strc->lock);
+	life = strc->phils[id]->life;
+	pthread_mutex_unlock(&strc->lock);
 	if (life == true)
-		printf("%llu\t%lu\tis sleeping\n", get_time() - philos->thinker[id]
-			->start_time, philos->thinker[id]->philo_id);
-	life = action_loop(philos, id, philos->thinker[id]->time_to_sleep);
+		printf("%llu\t%lu\tis sleeping\n", get_time() - strc->start_time,
+			strc->phils[id]->philo_id);
+	life = action_loop(strc, id, strc->time_to_sleep);
 	if (life == true)
-		printf("%llu\t%lu\tis thinking\n", get_time() - philos->thinker[id]
-			->start_time, philos->thinker[id]->philo_id);
+		printf("%llu\t%lu\tis thinking\n", get_time() - strc->start_time,
+			strc->phils[id]->philo_id);
 	return (NULL);
 }
