@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/02 16:15:56 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/10 16:49:08 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/16 15:29:45 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,13 @@ void	*philo_eat(t_philos *strc, size_t id, size_t id2)
 	life = action_loop(strc, id, strc->time_to_eat);
 	if (life == false)
 		return (NULL);
-	pthread_mutex_lock(&strc->lock);
+	pthread_mutex_lock(&strc->phils[id]->fork_lock);
 	strc->phils[id]->fork = 0;
+	pthread_mutex_unlock(&strc->phils[id]->fork_lock);
+	pthread_mutex_lock(&strc->phils[id2]->fork_lock);
 	strc->phils[id2]->fork = 0;
+	pthread_mutex_unlock(&strc->phils[id2]->fork_lock);
+	pthread_mutex_lock(&strc->lock);
 	strc->phils[id]->meals_eaten++;
 	pthread_mutex_unlock(&strc->lock);
 	return (philo_sleep(strc, id), NULL);

@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/25 12:32:58 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/10 16:48:24 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/16 14:07:51 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,16 @@ bool	death_loop(t_philos *strc, size_t count)
 	size_t	i;
 	t_time	now;
 	t_time	last_supper;
+	bool	life;
 
 	i = 0;
 	while (i < count)
 	{
-		now = get_time();
 		pthread_mutex_lock(&strc->lock);
 		last_supper = strc->phils[i]->last_supper;
+		life = strc->phils[i]->life;
 		pthread_mutex_unlock(&strc->lock);
+		now = get_time();
 		if (now - last_supper >= strc->time_to_die)
 		{
 			death(strc);
@@ -46,7 +48,7 @@ bool	death_loop(t_philos *strc, size_t count)
 				strc->phils[i]->philo_id);
 			return (false);
 		}
-		if (strc->phils[i]->life == false)
+		if (life == false)
 			return (false);
 		i++;
 	}
@@ -84,24 +86,24 @@ void	*has_eaten(void *arg)
 {
 	t_philos	*strc;
 	size_t		i;
-	size_t		count;
 	size_t		meals;
+	bool		life;
 
 	strc = (t_philos *)arg;
-	count = strc->nmb_of_philos;
 	while (true)
 	{
 		i = 0;
-		while (i < count)
+		while (i < strc->nmb_of_philos)
 		{
 			pthread_mutex_lock(&strc->lock);
 			meals = strc->phils[i]->meals_eaten;
+			life = strc->phils[i]->life;
 			pthread_mutex_unlock(&strc->lock);
 			if (meals >= strc->nmb_of_meals && strc->phils[i]->finished != true)
 				strc->phils[i]->finished = true;
 			i++;
 		}
-		if (done_eating(strc, count) == true || strc->phils[0]->life == false)
+		if (done_eating(strc, strc->nmb_of_philos) == true || life == false)
 			return (NULL);
 		usleep(200);
 	}

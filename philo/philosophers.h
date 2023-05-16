@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/19 12:55:25 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/10 16:52:56 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/16 14:51:40 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,13 @@ typedef unsigned long long	t_time;
 
 typedef struct s_thinker
 {
-	size_t	philo_id;
-	int		fork;
-	t_time	last_supper;
-	bool	life;
-	size_t	meals_eaten;
-	bool	finished;
+	size_t			philo_id;
+	int				fork;
+	t_time			last_supper;
+	bool			life;
+	size_t			meals_eaten;
+	bool			finished;
+	pthread_mutex_t	fork_lock;
 }	t_thinker;
 
 typedef struct s_philos
@@ -51,8 +52,11 @@ typedef struct s_philos
 
 // main.c
 t_thinker	**make_philos(size_t num);
-t_philos	*init_philos(char **argv);
 int			check_input(int argc, char **argv);
+
+// philo_init.c
+t_thinker	**make_philos(size_t num);
+t_philos	*init_philos(char **argv);
 
 // philo_utils.c
 void		philo_liberation(t_philos *strc);

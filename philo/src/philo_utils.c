@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/25 12:30:35 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/10 16:30:51 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/16 14:30:16 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	free_thinkers(t_thinker **phils, size_t count)
 	i = 0;
 	while (i < count)
 	{
+		pthread_mutex_destroy(&phils[i]->fork_lock);
 		free(phils[i]);
 		i++;
 	}

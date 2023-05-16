@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/20 17:40:29 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/10 16:53:07 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/16 14:28:09 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,50 +67,6 @@ int	main(int argc, char **argv)
 		pthread_join(thread2, NULL);
 	pthread_mutex_destroy(&strc->lock);
 	return (philo_liberation(strc), free(thread), 0);
-}
-
-t_thinker	**make_philos(size_t num)
-{
-	t_thinker	**phils;
-	size_t		i;
-
-	phils = malloc(sizeof(t_thinker *) * num);
-	if (!phils)
-		return (NULL);
-	i = 0;
-	while (i < num)
-	{
-		phils[i] = malloc(sizeof(t_thinker));
-		if (!phils[i])
-			return (free_thinkers(phils, i), NULL);
-		phils[i]->philo_id = i + 1;
-		phils[i]->fork = 0;
-		phils[i]->life = true;
-		phils[i]->last_supper = get_time();
-		phils[i]->meals_eaten = 0;
-		phils[i]->finished = false;
-		i++;
-	}
-	return (phils);
-}
-
-t_philos	*init_philos(char **argv)
-{
-	t_philos	*strc;
-
-	strc = malloc(sizeof(t_philos));
-	if (!strc)
-		return (NULL);
-	strc->nmb_of_philos = arg_to_int(argv[1]);
-	strc->time_to_die = arg_to_int(argv[2]);
-	strc->time_to_eat = arg_to_int(argv[3]);
-	strc->time_to_sleep = arg_to_int(argv[4]);
-	strc->nmb_of_meals = arg_to_int(argv[5]);
-	strc->start_time = get_time();
-	strc->phils = make_philos(strc->nmb_of_philos);
-	if (!strc->phils)
-		return (free(strc), NULL);
-	return (strc);
 }
 
 int	check_input(int argc, char **argv)

@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/19 11:52:07 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/10 16:51:50 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/16 15:29:48 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,28 +18,30 @@ void	fork_message(t_philos *strc, size_t f_id, size_t p_id, int value)
 	bool	life;
 
 	pthread_mutex_lock(&strc->lock);
-	fval = strc->phils[f_id]->fork;
 	life = strc->phils[p_id]->life;
 	pthread_mutex_unlock(&strc->lock);
+	pthread_mutex_lock(&strc->phils[f_id]->fork_lock);
+	fval = strc->phils[f_id]->fork;
 	if (fval == 0 && life == true)
 	{
 		printf("%llu\t%lu\thas taken a fork\n", get_time() - strc
 			->start_time, strc->phils[p_id]->philo_id);
-		pthread_mutex_lock(&strc->lock);
 		strc->phils[f_id]->fork = value;
-		pthread_mutex_unlock(&strc->lock);
 	}
+	pthread_mutex_unlock(&strc->phils[f_id]->fork_lock);
 }
 
 bool	take_forks(t_philos *strc, size_t id, size_t id2)
 {	
-	int	fork_two;
 	int	fork_one;
+	int	fork_two;
 
-	pthread_mutex_lock(&strc->lock);
-	fork_two = strc->phils[id2]->fork;
+	pthread_mutex_lock(&strc->phils[id]->fork_lock);
 	fork_one = strc->phils[id]->fork;
-	pthread_mutex_unlock(&strc->lock);
+	pthread_mutex_unlock(&strc->phils[id]->fork_lock);
+	pthread_mutex_lock(&strc->phils[id2]->fork_lock);
+	fork_two = strc->phils[id2]->fork;
+	pthread_mutex_unlock(&strc->phils[id2]->fork_lock);
 	if (fork_two != 1 && fork_one == 0)
 		fork_message(strc, id, id, 1);
 	if (fork_one != 2 && fork_two == 0)
