@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/02 16:15:56 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/17 11:37:56 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/17 18:11:59 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,19 @@ void	*philo_eat(t_philos *strc, size_t id, size_t id2)
 
 void	*philo_sleep(t_philos *strc, size_t id)
 {
+	bool	eaten;
+
 	pthread_mutex_lock(&strc->lock);
 	if (strc->phils[id]->life == true)
 		printf("%llu\t%lu\tis sleeping\n", get_time() - strc->start_time,
 			strc->phils[id]->philo_id);
 	pthread_mutex_unlock(&strc->lock);
-	if (action_loop(strc, id, strc->time_to_sleep) == true)
+	eaten = action_loop(strc, id, strc->time_to_sleep);
+	pthread_mutex_lock(&strc->lock);
+	if (eaten == true && strc->phils[id]->life == true)
 		printf("%llu\t%lu\tis thinking\n", get_time() - strc->start_time,
 			strc->phils[id]->philo_id);
+	pthread_mutex_unlock(&strc->lock);
+	usleep(50);
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/19 11:52:07 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/17 11:13:35 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/17 18:23:11 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,7 @@ void	philo_loop(t_philos *strc, size_t id, size_t id2)
 	bool	has_forks;
 	bool	living;
 
-	pthread_mutex_lock(&strc->lock);
-	living = strc->phils[id]->life;
-	pthread_mutex_unlock(&strc->lock);
+	living = true;
 	while (living == true)
 	{
 		pthread_mutex_lock(&strc->lock);
