@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/25 12:32:58 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/16 14:07:51 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/17 11:31:28 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,39 +17,33 @@ void	death(t_philos *strc)
 	size_t	i;
 
 	i = 0;
-	pthread_mutex_lock(&strc->lock);
 	while (i < strc->nmb_of_philos)
 	{
 		strc->phils[i]->life = false;
 		i++;
 	}
-	pthread_mutex_unlock(&strc->lock);
 }
 
 bool	death_loop(t_philos *strc, size_t count)
 {
 	size_t	i;
-	t_time	now;
-	t_time	last_supper;
-	bool	life;
 
 	i = 0;
 	while (i < count)
 	{
 		pthread_mutex_lock(&strc->lock);
-		last_supper = strc->phils[i]->last_supper;
-		life = strc->phils[i]->life;
-		pthread_mutex_unlock(&strc->lock);
-		now = get_time();
-		if (now - last_supper >= strc->time_to_die)
+		if (get_time() - strc->phils[i]->last_supper >= strc->time_to_die)
 		{
 			death(strc);
 			printf("%llu\t%lu\tdied\n", get_time() - strc->start_time,
 				strc->phils[i]->philo_id);
-			return (false);
+			return (pthread_mutex_unlock(&strc->lock), false);
 		}
-		if (life == false)
-			return (false);
+		pthread_mutex_unlock(&strc->lock);
+		pthread_mutex_lock(&strc->lock);
+		if (strc->phils[i]->life == false)
+			return (pthread_mutex_unlock(&strc->lock), false);
+		pthread_mutex_unlock(&strc->lock);
 		i++;
 	}
 	return (true);
@@ -78,7 +72,9 @@ bool	done_eating(t_philos *strc, size_t count)
 			return (false);
 		i++;
 	}
+	pthread_mutex_lock(&strc->lock);
 	death(strc);
+	pthread_mutex_unlock(&strc->lock);
 	return (true);
 }
 
@@ -86,8 +82,7 @@ void	*has_eaten(void *arg)
 {
 	t_philos	*strc;
 	size_t		i;
-	size_t		meals;
-	bool		life;
+	bool		done;
 
 	strc = (t_philos *)arg;
 	while (true)
@@ -96,15 +91,17 @@ void	*has_eaten(void *arg)
 		while (i < strc->nmb_of_philos)
 		{
 			pthread_mutex_lock(&strc->lock);
-			meals = strc->phils[i]->meals_eaten;
-			life = strc->phils[i]->life;
-			pthread_mutex_unlock(&strc->lock);
-			if (meals >= strc->nmb_of_meals && strc->phils[i]->finished != true)
+			if (strc->phils[i]->meals_eaten >= strc->nmb_of_meals
+				&& strc->phils[i]->finished != true)
 				strc->phils[i]->finished = true;
+			pthread_mutex_unlock(&strc->lock);
 			i++;
 		}
-		if (done_eating(strc, strc->nmb_of_philos) == true || life == false)
-			return (NULL);
+		done = done_eating(strc, strc->nmb_of_philos);
+		pthread_mutex_lock(&strc->lock);
+		if (done == true || strc->phils[0]->life == false)
+			return (pthread_mutex_unlock(&strc->lock), NULL);
+		pthread_mutex_unlock(&strc->lock);
 		usleep(200);
 	}
 	return (NULL);

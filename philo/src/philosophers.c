@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/19 11:52:07 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/16 15:29:48 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/17 11:13:35 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,16 @@
 
 void	fork_message(t_philos *strc, size_t f_id, size_t p_id, int value)
 {
-	int		fval;
-	bool	life;
-
 	pthread_mutex_lock(&strc->lock);
-	life = strc->phils[p_id]->life;
-	pthread_mutex_unlock(&strc->lock);
 	pthread_mutex_lock(&strc->phils[f_id]->fork_lock);
-	fval = strc->phils[f_id]->fork;
-	if (fval == 0 && life == true)
+	if (strc->phils[f_id]->fork == 0 && strc->phils[p_id]->life == true)
 	{
 		printf("%llu\t%lu\thas taken a fork\n", get_time() - strc
 			->start_time, strc->phils[p_id]->philo_id);
 		strc->phils[f_id]->fork = value;
 	}
 	pthread_mutex_unlock(&strc->phils[f_id]->fork_lock);
+	pthread_mutex_unlock(&strc->lock);
 }
 
 bool	take_forks(t_philos *strc, size_t id, size_t id2)
@@ -79,7 +74,7 @@ void	even_wait(t_philos *strc)
 	t_time	wait;
 
 	wait = get_time() - strc->start_time;
-	while (wait < strc->time_to_eat - 10)
+	while (wait < strc->time_to_eat - 100)
 	{
 		wait = get_time() - strc->start_time;
 		usleep(200);

@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/02 16:15:56 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/16 15:29:45 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/17 11:37:56 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,17 +45,13 @@ bool	action_loop(t_philos *strc, size_t id, t_time duration)
 
 void	*philo_eat(t_philos *strc, size_t id, size_t id2)
 {
-	bool	life;
-
 	pthread_mutex_lock(&strc->lock);
-	life = strc->phils[id]->life;
 	strc->phils[id]->last_supper = get_time();
-	pthread_mutex_unlock(&strc->lock);
-	if (life == true)
+	if (strc->phils[id]->life == true)
 		printf("%llu\t%lu\tis eating\n", get_time() - strc->start_time,
 			strc->phils[id]->philo_id);
-	life = action_loop(strc, id, strc->time_to_eat);
-	if (life == false)
+	pthread_mutex_unlock(&strc->lock);
+	if (action_loop(strc, id, strc->time_to_eat) == false)
 		return (NULL);
 	pthread_mutex_lock(&strc->phils[id]->fork_lock);
 	strc->phils[id]->fork = 0;
@@ -71,16 +67,12 @@ void	*philo_eat(t_philos *strc, size_t id, size_t id2)
 
 void	*philo_sleep(t_philos *strc, size_t id)
 {
-	bool	life;
-
 	pthread_mutex_lock(&strc->lock);
-	life = strc->phils[id]->life;
-	pthread_mutex_unlock(&strc->lock);
-	if (life == true)
+	if (strc->phils[id]->life == true)
 		printf("%llu\t%lu\tis sleeping\n", get_time() - strc->start_time,
 			strc->phils[id]->philo_id);
-	life = action_loop(strc, id, strc->time_to_sleep);
-	if (life == true)
+	pthread_mutex_unlock(&strc->lock);
+	if (action_loop(strc, id, strc->time_to_sleep) == true)
 		printf("%llu\t%lu\tis thinking\n", get_time() - strc->start_time,
 			strc->phils[id]->philo_id);
 	return (NULL);
