@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/19 12:55:25 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/16 14:51:40 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/18 12:43:30 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,11 @@ void		philo_error(char *message);
 t_time		get_time(void);
 int			arg_to_int(char *arg);
 
-// philosophers.c
+// philo_forks.c
 void		fork_message(t_philos *strc, size_t f_id, size_t p_id, int value);
-bool		take_forks(t_philos *strc, size_t id, size_t id2);
+void		take_forks(t_philos *strc, size_t id, size_t id2);
+
+// philosophers.c
 void		philo_loop(t_philos *strc, size_t id, size_t id2);
 void		*philo_thread(void *arg);
 void		even_wait(t_philos *strc);
@@ -81,7 +83,7 @@ void		*philo_sleep(t_philos *strc, size_t id);
 // philo_death.c
 void		death(t_philos *strc);
 bool		death_loop(t_philos *strc, size_t count);
-void		*is_dead(void *arg);
+void		is_dead(t_philos *strc);
 bool		done_eating(t_philos *strc, size_t count);
 void		*has_eaten(void *arg);
 #endif

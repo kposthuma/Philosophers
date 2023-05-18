@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/25 12:32:58 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/17 11:31:28 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/18 12:39:00 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,16 +49,13 @@ bool	death_loop(t_philos *strc, size_t count)
 	return (true);
 }
 
-void	*is_dead(void *arg)
+void	is_dead(t_philos *strc)
 {
-	t_philos	*strc;
 	size_t		count;
 
-	strc = (t_philos *)arg;
 	count = strc->nmb_of_philos;
 	while (death_loop(strc, count) == true)
 		usleep(200);
-	return (NULL);
 }
 
 bool	done_eating(t_philos *strc, size_t count)
