@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/19 11:52:07 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/21 13:15:41 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/21 15:10:58 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ void	*philo_thread(void *arg)
 	strc = (t_philos *)arg;
 	pthread_mutex_lock(&strc->lock);
 	id = i;
+	if (i == 0)
+		strc->start_time = get_time();
 	if (id == 0)
 		id2 = strc->nmb_of_philos - 1;
 	else

@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/16 14:21:21 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/18 14:56:32 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/21 15:11:19 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ t_philos	*init_philos(char **argv)
 	strc->time_to_eat = arg_to_int(argv[3]);
 	strc->time_to_sleep = arg_to_int(argv[4]);
 	strc->nmb_of_meals = arg_to_int(argv[5]);
-	strc->start_time = get_time();
 	strc->phils = make_philos(strc->nmb_of_philos);
 	if (!strc->phils)
 		return (free(strc), NULL);
