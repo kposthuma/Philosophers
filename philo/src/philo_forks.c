@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/18 11:39:29 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/18 14:46:15 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/21 13:28:03 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ void	take_forks(t_philos *strc, size_t id, size_t id2)
 	int	fork_two;
 
 	pthread_mutex_lock(&strc->phils[id]->fork_lock);
-	pthread_mutex_lock(&strc->phils[id2]->fork_lock);
+	if (id != id2)
+		pthread_mutex_lock(&strc->phils[id2]->fork_lock);
 	if (strc->phils[id2]->fork != 1 && strc->phils[id]->fork == 0)
 		fork_message(strc, id, id, 1);
 	if (strc->phils[id]->fork != 2 && strc->phils[id2]->fork == 0)
@@ -47,6 +48,7 @@ void	take_forks(t_philos *strc, size_t id, size_t id2)
 	else
 	{
 		pthread_mutex_unlock(&strc->phils[id]->fork_lock);
-		pthread_mutex_unlock(&strc->phils[id2]->fork_lock);
+		if (id != id2)
+			pthread_mutex_unlock(&strc->phils[id2]->fork_lock);
 	}
 }

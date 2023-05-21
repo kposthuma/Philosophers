@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/19 11:52:07 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/18 12:45:41 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/21 13:15:41 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	even_wait(t_philos *strc)
 	t_time	wait;
 
 	wait = get_time() - strc->start_time;
-	while (wait < strc->time_to_eat - 100)
+	while (wait < strc->time_to_eat - strc->time_to_eat / 2)
 	{
 		wait = get_time() - strc->start_time;
 		usleep(200);
