@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/19 12:55:25 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/18 12:43:30 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/23 17:12:14 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,12 @@ typedef struct s_philos
 }	t_philos;
 
 // main.c
-t_thinker	**make_philos(size_t num);
 int			check_input(int argc, char **argv);
+void		end_of_philo(t_philos *strc, size_t i);
+void		join_threads(t_philos *strc, pthread_t *ph_thread,
+				pthread_t ml_thread);
+bool		make_threads(t_philos *strc, pthread_t *ph_thread,
+				pthread_t ml_thread);
 
 // philo_init.c
 t_thinker	**make_philos(size_t num);
@@ -71,7 +75,7 @@ void		take_forks(t_philos *strc, size_t id, size_t id2);
 
 // philosophers.c
 void		philo_loop(t_philos *strc, size_t id, size_t id2);
-void		*philo_thread(void *arg);
+void		*phil_thr(void *arg);
 void		even_wait(t_philos *strc);
 
 // philo_eat_sleep.c

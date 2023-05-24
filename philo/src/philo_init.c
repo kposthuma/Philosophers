@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/16 14:21:21 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/21 15:11:19 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/24 11:58:28 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ t_thinker	**make_philos(size_t num)
 		phils[i]->last_supper = get_time();
 		phils[i]->meals_eaten = 0;
 		phils[i]->finished = false;
-		pthread_mutex_init(&phils[i]->fork_lock, NULL);
+		if (pthread_mutex_init(&phils[i]->fork_lock, NULL) != 0)
+			return (free_thinkers(phils, i), NULL);
 		i++;
 	}
 	return (phils);

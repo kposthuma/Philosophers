@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/19 11:52:07 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/21 15:10:58 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/23 16:57:11 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	even_wait(t_philos *strc)
 	}
 }
 
-void	*philo_thread(void *arg)
+void	*phil_thr(void *arg)
 {
 	t_philos			*strc;
 	static size_t		i;

@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/25 12:30:35 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/16 14:30:16 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/23 17:01:59 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ t_time	get_time(void)
 {
 	struct timeval	curr;
 
-	gettimeofday(&curr, NULL);
+	if (gettimeofday(&curr, NULL) != 0)
+		return (philo_error("Error: gettimeofday() failure\n"), 0);
 	return ((curr.tv_sec * 1000 + curr.tv_usec / 1000));
 }
 
