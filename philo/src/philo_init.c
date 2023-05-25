@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/16 14:21:21 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/24 11:58:28 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/25 11:27:30 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,5 +54,7 @@ t_philos	*init_philos(char **argv)
 	strc->phils = make_philos(strc->nmb_of_philos);
 	if (!strc->phils)
 		return (free(strc), NULL);
+	if (pthread_mutex_init(&strc->lock, NULL) != 0)
+		return (philo_error(NULL), philo_liberation(strc), NULL);
 	return (strc);
 }

@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/19 12:55:25 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/23 17:12:14 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/25 11:28:56 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ typedef struct s_philos
 
 // main.c
 int			check_input(int argc, char **argv);
-void		end_of_philo(t_philos *strc, size_t i);
+void		end_of_philo(t_philos *strc, size_t i,
+				pthread_t *ph_thread);
 void		join_threads(t_philos *strc, pthread_t *ph_thread,
 				pthread_t ml_thread);
 bool		make_threads(t_philos *strc, pthread_t *ph_thread,
