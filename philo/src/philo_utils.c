@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/25 12:30:35 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/23 17:01:59 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/29 12:14:53 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	philo_liberation(t_philos *strc)
 {
+	if (!strc)
+		return ;
 	if (strc->phils)
 		free_thinkers(strc->phils, strc->nmb_of_philos);
 	free(strc);

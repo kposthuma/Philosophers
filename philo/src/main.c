@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/20 17:40:29 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/29 08:37:33 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/29 12:14:59 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ void	end_of_philo(t_philos *strc, size_t i, pthread_t *ph_thread)
 		pthread_join(ph_thread[j], NULL);
 		j--;
 	}
-
 }
 
 bool	make_threads(t_philos *strc, pthread_t *ph_thread, pthread_t ml_thread)
