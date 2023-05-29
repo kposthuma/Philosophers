@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/20 17:40:29 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/25 11:27:38 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/05/29 08:37:33 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	end_of_philo(t_philos *strc, size_t i, pthread_t *ph_thread)
 	while (j <= i)
 	{
 		strc->phils[j]->life = false;
+		j++;
 	}
 	pthread_mutex_unlock(&strc->lock);
 	while (j >= 0)
@@ -78,8 +79,9 @@ bool	make_threads(t_philos *strc, pthread_t *ph_thread, pthread_t ml_thread)
 	i = 0;
 	while (i < strc->nmb_of_philos)
 	{
-		if (pthread_create(&ph_thread[i++], NULL, &phil_thr, (void *)strc) != 0)
+		if (pthread_create(&ph_thread[i], NULL, &phil_thr, (void *)strc) != 0)
 			return (end_of_philo(strc, i, ph_thread), false);
+		i++;
 	}
 	if (strc->nmb_of_meals != 0)
 	{
