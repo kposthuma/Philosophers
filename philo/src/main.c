@@ -6,7 +6,7 @@
 /*   By: kposthum <kposthum@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/20 17:40:29 by kposthum      #+#    #+#                 */
-/*   Updated: 2023/05/29 14:58:20 by kposthum      ########   odam.nl         */
+/*   Updated: 2023/06/06 14:24:23 by kposthum      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,6 @@ int	main(int argc, char **argv)
 	ml_thread = NULL;
 	if (make_threads(strc, ph_thread, ml_thread) != true)
 		return (philo_error(NULL), philo_liberation(strc), free(ph_thread), 1);
-	else
-	{
-		is_dead(strc);
-		join_threads(strc, ph_thread, ml_thread);
-	}
 	pthread_mutex_destroy(&strc->lock);
 	return (philo_liberation(strc), free(ph_thread), 0);
 }
@@ -87,6 +82,8 @@ bool	make_threads(t_philos *strc, pthread_t *ph_thread, pthread_t ml_thread)
 		if (pthread_create(&ml_thread, NULL, &has_eaten, (void *)strc) != 0)
 			return (end_of_philo(strc, i, ph_thread), false);
 	}
+	is_dead(strc);
+	join_threads(strc, ph_thread, ml_thread);
 	return (true);
 }
 
